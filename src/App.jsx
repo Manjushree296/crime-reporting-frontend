@@ -4,6 +4,7 @@ import SignupForm from "./pages/SignupForm";
 import CitizenDashboard from "./pages/CitizenDashboard";
 import OfficerDashboard from "./pages/OfficerDashboard";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import CaseCard from "./components/CaseCard";
 
 const router = createBrowserRouter([
   {
@@ -17,6 +18,10 @@ const router = createBrowserRouter([
   {
     path: "/dashboard/citizen",
     element: <CitizenDashboard />,
+  },
+  {
+    path: "/dashboard/citizen/all-reports",
+    element: <CaseCard/>,
   },
   {
     path: "/dashboard/officer",

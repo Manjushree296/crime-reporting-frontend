@@ -6,10 +6,12 @@ import { Icon } from '@iconify/react';
 const Header = () => {
   return (
     <Navbar isBordered maxWidth="xl">
+    <Link to="/dashboard/citizen">
         <NavbarBrand>
           <Icon icon="lucide:shield-alert" className="text-primary text-2xl mr-2" />
           <p className="font-bold text-inherit">Crime Report System</p>
         </NavbarBrand>
+        </Link>
         <NavbarContent justify="end">
           <NavbarItem>
             <Button 

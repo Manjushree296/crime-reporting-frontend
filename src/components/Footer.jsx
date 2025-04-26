@@ -4,7 +4,7 @@ const Footer = ()=> {
   const currentYear = new Date().getFullYear();
   
   return (
-    <footer className="bg-content1 py-4 px-6 border-t border-divider">
+    <footer className="bg-content1 py-4 px-6 border-t border-divider relative bottom-0">
       <div className="container mx-auto flex flex-col md:flex-row justify-between items-center">
         <p className="text-default-500 text-sm">
           &copy; {currentYear} Crime Report System. All rights reserved.
@@ -14,6 +14,7 @@ const Footer = ()=> {
         </div>
       </div>
     </footer>
+    
   );
 }
 

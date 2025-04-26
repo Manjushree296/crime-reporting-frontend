@@ -68,3 +68,18 @@ body {
 .form-button:hover {
   background-color: #b91c1c; /* Red-700 */
 }
+
+@keyframes slideUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-slideUp {
+  animation: slideUp 0.6s forwards;
+}
