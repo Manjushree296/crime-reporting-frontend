@@ -5,6 +5,7 @@ import { Icon } from '@iconify/react';
 import { motion } from 'framer-motion';
 import { useForm } from "react-hook-form";
 import { loginUser, getCurrentUser } from '../services/api';
+import toast from 'react-hot-toast';
 
 const LoginForm  = ()=>{
 
@@ -17,7 +18,7 @@ const LoginForm  = ()=>{
     console.log("Form submitted with data:", data);
     try {
       const loginResponse = await loginUser(data.username, data.password);
-      console.log("Login successful:", loginResponse.data);
+      toast.success("Login Successful!")
 
       // Fetch current user to get role
       const userResponse = await getCurrentUser();

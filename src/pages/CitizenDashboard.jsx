@@ -30,7 +30,7 @@ import Faq from "../components/Faq";
 import SafetyTips from "../components/SafetyTips";
 import EmergencyContacts from "../components/EmergencyContacts";
 
-export function CrimeReportDashboard() {
+export function CitizenDashboard() {
   const [isOpen, setIsOpen] = useState(false);
 
 
@@ -110,4 +110,4 @@ export function CrimeReportDashboard() {
 
 
 
-export default CrimeReportDashboard;
+export default CitizenDashboard;

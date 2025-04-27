@@ -5,11 +5,17 @@ import CitizenDashboard from "./pages/CitizenDashboard";
 import OfficerDashboard from "./pages/OfficerDashboard";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import CaseCard from "./components/CaseCard";
+import { Toaster } from 'react-hot-toast';
+import LoginForm from "./pages/LoginForm";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <Root />,
+  },
+  {
+    path: "/login",
+    element: <LoginForm />,
   },
   {
     path: "/signup",
@@ -32,6 +38,7 @@ const router = createBrowserRouter([
 function App() {
   return (
     <>
+    <Toaster position="top-right" />
       <RouterProvider router={router} />
     </>
   );
