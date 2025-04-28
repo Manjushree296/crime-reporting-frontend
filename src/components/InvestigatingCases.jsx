@@ -14,6 +14,7 @@ import {
   getInvestigatingCases,
   getOfficers,
   reassignCase,
+  updateCaseStatus,
 } from "../services/api";
 import toast from "react-hot-toast";
 
