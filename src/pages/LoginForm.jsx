@@ -18,10 +18,11 @@ const LoginForm  = ()=>{
     console.log("Form submitted with data:", data);
     try {
       const loginResponse = await loginUser(data.username, data.password);
-      toast.success("Login Successful!")
-
       // Fetch current user to get role
       const userResponse = await getCurrentUser();
+
+      toast.success(`Welcome ${userResponse.data.fullName}!`)
+
       console.log("User response:", userResponse.data);
       const user = userResponse.data;
       if (!user || !user.role) {

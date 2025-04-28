@@ -26,6 +26,7 @@ export const InvestigatingCases = () => {
     const fetchCases = async () => {
       try {
         const response = await getInvestigatingCases();
+        console.log(response)
         setCases(response.data);
       } catch (error) {
         toast.error("Failed to load investigating cases");

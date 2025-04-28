@@ -134,6 +134,13 @@ function CaseCard() {
                             <span className="font-medium">Officer:</span>{" "}
                             {report.officerName || "Not assigned"}
                           </div>
+
+                          {report.rejectionReason && (
+                    <div className="mt-2 p-2 bg-red-50 rounded-md">
+                      <p className="text-sm font-medium text-red-700">Rejection Reason:</p>
+                      <p className="text-sm text-red-600">{report.rejectionReason}</p>
+                    </div>
+                  )}
                         </div>
                       </CardBody>
                     </Card>
