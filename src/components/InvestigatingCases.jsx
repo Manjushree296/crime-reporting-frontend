@@ -44,6 +44,8 @@ export const InvestigatingCases = () => {
     fetchOfficers();
   }, []);
 
+  
+
   const handleStatusChange = async (caseId, newStatus) => {
     if (newStatus === "resolved") {
       try {
@@ -67,6 +69,7 @@ export const InvestigatingCases = () => {
             ? {
                 ...c,
                 assignedOfficerId: officerId,
+                assignedOfficer:officers.find((o) => o.id === officerId)?.fullName,
                 officerName: officers.find((o) => o.id === officerId)?.fullName,
               }
             : c
@@ -190,7 +193,8 @@ export const InvestigatingCases = () => {
                         startContent={<Icon icon="lucide:users" />}
                         className="flex-1"
                       >
-                        Reassign
+                      {caseItem.assignedOfficer==null?"Assign":"Reassign"}
+                        
                       </Button>
                     </DropdownTrigger>
                     <DropdownMenu aria-label="Officer options">
