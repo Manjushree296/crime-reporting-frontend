@@ -13,7 +13,7 @@ const Header = () => {
       toast.success("Logged out successfully!");
       navigate("/logout")
     } catch (error) {
-      toast.error("Something went wrong!")
+      console.log(error.message)
     }
 
   }

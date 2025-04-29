@@ -38,7 +38,11 @@ const router = createBrowserRouter([
 function App() {
   return (
     <>
-    <Toaster position="top-right" />
+    <Toaster position="top-right" toastOptions={{
+        style: {
+          marginTop: '64px', // Offset by header height
+        }
+      }}/>
       <RouterProvider router={router} />
     </>
   );

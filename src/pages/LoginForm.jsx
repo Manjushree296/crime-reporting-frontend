@@ -105,7 +105,7 @@ const LoginForm  = ()=>{
                 transition={{ delay: 0.5 }}
               >
                 <Button disabled={isSubmitting} color="primary" type="submit" className="mt-4 w-full shadow-md" >
-                  Sign In
+                  {isSubmitting?(<>"Logging in..." <Icon icon="line-md:loading-twotone-loop" className="animate-spin" /> </>):"Sign In"}
                 </Button>
               </motion.div>
 

@@ -23,7 +23,7 @@ const userTypes = [
 ];
 
 const SignupForm = () => {
-  const { register, control, handleSubmit, formState: { errors }, setError } = useForm({
+  const { register, control, handleSubmit, formState: { errors, isSubmitting }, setError } = useForm({
     defaultValues: {
       fullName: '',
       username: '',
@@ -226,8 +226,8 @@ const SignupForm = () => {
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ delay: 0.9 }}
               >
-                <Button color="primary" type="submit" className="mt-4 w-full shadow-md">
-                  Create Account
+                <Button disabled={isSubmitting} color="primary" type="submit" className="mt-4 w-full shadow-md">
+                 {isSubmitting?( <Icon icon="line-md:loading-twotone-loop" className="animate-spin" />):"Create Account"}
                 </Button>
               </motion.div>
 
