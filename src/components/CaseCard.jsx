@@ -2,7 +2,9 @@ import React, { useState, useEffect } from "react";
 import { Card, CardBody } from "@heroui/react";
 import Header from "./Header";
 import Footer from "./Footer";
+import { Icon } from "@iconify/react";
 import { getCitizenReports } from "../services/api";
+import toast from "react-hot-toast";
 
 function CaseCard() {
   const [reports, setReports] = useState([]);
@@ -14,13 +16,13 @@ function CaseCard() {
       try {
         const response = await getCitizenReports();
         console.log("Fetched reports:", response.data);
+        console.log("Officer",response.data[0].officerName)
         setReports(response.data);
       } catch (err) {
         console.error("Error fetching reports:", err.response?.data || err.message);
         const errorMessage = err.response?.data?.error || "Failed to load reports. Please try again later.";
         setError(errorMessage);
         if (err.response?.status === 401) {
-          // Optionally redirect to login page if session expired
           console.log("Session expired, redirecting to login...");
         }
       } finally {
@@ -31,48 +33,26 @@ function CaseCard() {
     fetchReports();
   }, []);
 
-  const getBorderColor = (status) => {
+  const getReportStatusColor = (status) => {
     switch (status) {
       case "pending":
-        return "border-l-4 border-yellow-400";
+        return { bg: "bg-amber-100", text: "text-amber-800" };
+      case "accepted":
+        return { bg: "bg-teal-100", text: "text-teal-800" };
+      case "rejected":
+        return { bg: "bg-red-100", text: "text-red-800" };
       case "investigating":
-        return "border-l-4 border-blue-400";
+        return { bg: "bg-blue-100", text: "text-blue-800" };
       case "resolved":
-        return "border-l-4 border-green-400";
+        return { bg: "bg-green-100", text: "text-green-800" };
       default:
-        return "border-l-4 border-gray-400";
-    }
-  };
-
-  const getStatusTextColor = (status) => {
-    switch (status) {
-      case "pending":
-        return "text-yellow-500";
-      case "investigating":
-        return "text-blue-500";
-      case "resolved":
-        return "text-green-500";
-      default:
-        return "text-gray-500";
-    }
-  };
-
-  const getStatusDotColor = (status) => {
-    switch (status) {
-      case "pending":
-        return "bg-yellow-400";
-      case "investigating":
-        return "bg-blue-400";
-      case "resolved":
-        return "bg-green-400";
-      default:
-        return "bg-gray-400";
+        return { bg: "bg-default-100", text: "text-default-800" };
     }
   };
 
   return (
     <>
-      <div className="min-h-screen flex flex-col bg-gradient-to-b from-slate-50 to-slate-10">
+      <div className="min-h-screen flex flex-col bg-gradient-to-b from-slate-50 to-slate-100">
         <Header />
         <main className="flex-1 py-8 px-4 md:px-6 lg:px-8">
           <div className="container mx-auto max-w-7xl">
@@ -86,61 +66,52 @@ function CaseCard() {
               ) : error ? (
                 <p className="text-red-500">{error}</p>
               ) : reports.length === 0 ? (
-                <p>No reports submitted yet.</p>
+                <div className="flex flex-col items-center justify-center py-12 text-default-400">
+                  <Icon icon="lucide:inbox" className="text-5xl mb-4" />
+                  <p className="text-lg">No reports submitted</p>
+                </div>
               ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-4">
                   {reports.map((report) => (
                     <Card
                       key={report.id}
-                      className={`shadow-lg hover:shadow-xl transition-shadow duration-300 animate-fade-in ${getBorderColor(
-                        report.status
-                      )}`}
+                      className="bg-white shadow-sm border border-gray-200 rounded-lg hover:shadow-md transition-shadow duration-300"
                     >
-                      <CardBody className="p-4 bg-content1">
-                        <div className="flex justify-between items-center mb-2">
+                      <CardBody className="gap-2 p-5">
+                        <div className="flex justify-between items-start">
                           <h3 className="text-lg font-semibold">{report.title}</h3>
-                          <div className="flex items-center gap-1">
-                            <span
-                              className={`w-3 h-3 rounded-full ${getStatusDotColor(
-                                report.status
-                              )} animate-pulse`}
-                            />
-                            <span
-                              className={`text-l font-semibold ${getStatusTextColor(
-                                report.status
-                              )}`}
-                            >
-                              {report.status.charAt(0).toUpperCase() + report.status.slice(1)}
-                            </span>
-                          </div>
+                          <span
+                            className={`text-xs ${getReportStatusColor(report.status).bg} ${getReportStatusColor(report.status).text} px-2 py-1 rounded-full capitalize`}
+                          >
+                            {report.status}
+                          </span>
                         </div>
-
-                        <p className="text-default-500 text-sm mb-4 line-clamp-2">
+                        <p className="text-default-500 text-sm line-clamp-2">
                           {report.description}
                         </p>
-
-                        <div className="space-y-2 text-sm">
+                        <div className="mt-2 space-y-1 text-sm">
                           <div className="flex items-center gap-2">
-                            <span className="font-medium">Victim:</span>{" "}
-                            {report.victimName || "Self"}
+                            <Icon icon="lucide:user" className="text-default-400" />
+                            <span>Victim: {report.victimName || "Self"}</span>
                           </div>
-
                           <div className="flex items-center gap-2">
-                            <span className="font-medium">Location:</span>{" "}
-                            {report.location}
+                            <Icon icon="lucide:map-pin" className="text-default-400" />
+                            <span>Location: {report.location}</span>
                           </div>
-
-                          <div className="flex items-center gap-2">
-                            <span className="font-medium">Officer:</span>{" "}
-                            {report.officerName || "Not assigned"}
-                          </div>
-
-                          {report.rejectionReason && (
-                    <div className="mt-2 p-2 bg-red-50 rounded-md">
-                      <p className="text-sm font-medium text-red-700">Rejection Reason:</p>
-                      <p className="text-sm text-red-600">{report.rejectionReason}</p>
-                    </div>
-                  )}
+                          
+                          
+                            <div className="flex items-center gap-2">
+                              <Icon icon="lucide:user-check" className="text-default-400" />
+                              <span>Officer: {report.officerName}</span>
+                              {report.officerName || "Not assigned"}
+                            </div>
+                          
+                          {report.status === "rejected" && report.rejectionReason && (
+                            <div className="mt-2 p-2 bg-red-50 rounded-md">
+                              <p className="text-sm font-medium text-red-700">Rejection Reason:</p>
+                              <p className="text-sm text-red-600">{report.rejectionReason}</p>
+                            </div>
+                          )}
                         </div>
                       </CardBody>
                     </Card>

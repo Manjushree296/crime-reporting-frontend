@@ -7,21 +7,18 @@ import { useForm } from "react-hook-form";
 import { loginUser, getCurrentUser } from '../services/api';
 import toast from 'react-hot-toast';
 
-const LoginForm  = ()=>{
-
-
-  const { register, handleSubmit, watch, formState: { errors, isSubmitting } } = useForm();
-
+const LoginForm = () => {
+  const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm();
   const navigate = useNavigate();
 
   const onSubmit = async (data) => {
     console.log("Form submitted with data:", data);
     try {
-      const loginResponse = await loginUser(data.username, data.password);
+      await loginUser(data.username, data.password);
       // Fetch current user to get role
       const userResponse = await getCurrentUser();
 
-      toast.success(`Welcome ${userResponse.data.fullName}!`)
+      toast.success(`Welcome ${userResponse.data.fullName}!`);
 
       console.log("User response:", userResponse.data);
       const user = userResponse.data;
@@ -37,11 +34,9 @@ const LoginForm  = ()=>{
       }
     } catch (error) {
       console.error("Error during login:", error);
-      alert(error.message || "Login failed. Please check your username and password.");
+      toast.error(error.message || "Login failed. Please check your username and password.");
     }
   };
-
-  
 
   return (
     <div className="min-h-screen w-full flex items-center justify-center bg-slate-100 p-4">
@@ -73,8 +68,7 @@ const LoginForm  = ()=>{
                 <Input
                   label="Username"
                   placeholder="Enter your username"
-                
-                  {...register("username")}
+                  {...register("username", { required: "Username is required" })}
                   type='text'
                   startContent={<Icon icon="lucide:user" className="text-default-400" />}
                   isRequired
@@ -90,8 +84,7 @@ const LoginForm  = ()=>{
                 <Input
                   label="Password"
                   placeholder="Enter your password"
-                 
-                  {...register("password")}
+                  {...register("password", { required: "Password is required" })}
                   type="password"
                   startContent={<Icon icon="lucide:lock" className="text-default-400" />}
                   isRequired
@@ -104,8 +97,14 @@ const LoginForm  = ()=>{
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ delay: 0.5 }}
               >
-                <Button disabled={isSubmitting} color="primary" type="submit" className="mt-4 w-full shadow-md" >
-                  {isSubmitting?(<>"Logging in..." <Icon icon="line-md:loading-twotone-loop" className="animate-spin" /> </>):"Sign In"}
+                <Button disabled={isSubmitting} color="primary" type="submit" className="mt-4 w-full shadow-md">
+                  {isSubmitting ? (
+                    <>
+                      Logging in... <Icon icon="line-md:loading-twotone-loop" className="animate-spin" />
+                    </>
+                  ) : (
+                    "Sign In"
+                  )}
                 </Button>
               </motion.div>
 
@@ -126,6 +125,6 @@ const LoginForm  = ()=>{
       </motion.div>
     </div>
   );
-}
+};
 
 export default LoginForm;

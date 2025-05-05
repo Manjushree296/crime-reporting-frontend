@@ -11,7 +11,7 @@ const Header = () => {
     try {
       await logout();
       toast.success("Logged out successfully!");
-      navigate("/logout")
+      navigate("/login")
     } catch (error) {
       console.log(error.message)
     }
