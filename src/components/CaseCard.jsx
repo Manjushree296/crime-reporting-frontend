@@ -63,8 +63,6 @@ function CaseCard() {
             <div className="bg-white rounded-lg p-6 border shadow-sm">
               {loading ? (
                 <p>Loading reports...</p>
-              ) : error ? (
-                <p className="text-red-500">{error}</p>
               ) : reports.length === 0 ? (
                 <div className="flex flex-col items-center justify-center py-12 text-default-400">
                   <Icon icon="lucide:inbox" className="text-5xl mb-4" />
