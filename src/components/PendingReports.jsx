@@ -48,11 +48,11 @@ export const PendingReports = () => {
     }
   };
 
-  const handleCaseAssignment = async (reportId, caseId) => {
+const handleCaseAssignment = async (reportId, { caseId, caseNumber }) => {
     try {
       await acceptReport(reportId, caseId);
       setReports(reports.filter((r) => r.id !== reportId));
-      toast.success(`Report assigned to case #${caseId || "new"}`);
+      toast.success(`Report assigned to case #${caseNumber || "new"}`);
       onClose();
     } catch (error) {
       toast.error("Failed to assign report to case");

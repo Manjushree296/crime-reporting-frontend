@@ -26,7 +26,7 @@ export const InvestigatingCases = () => {
     const fetchCases = async () => {
       try {
         const response = await getInvestigatingCases();
-        console.log(response)
+        console.log("Cases=",response.data)
         setCases(response.data);
       } catch (error) {
         toast.error("Failed to load investigating cases");
@@ -35,6 +35,7 @@ export const InvestigatingCases = () => {
     const fetchOfficers = async () => {
       try {
         const response = await getOfficers();
+        console.log("Officers name = ", response.data)
         setOfficers(response.data);
       } catch (error) {
         toast.error("Failed to load officers");
@@ -60,26 +61,20 @@ export const InvestigatingCases = () => {
     }
   };
 
-  const handleReassign = async (caseId, officerId) => {
-    try {
-      await reassignCase(caseId, officerId);
-      setCases(
-        cases.map((c) =>
-          c.id === caseId
-            ? {
-                ...c,
-                assignedOfficerId: officerId,
-                assignedOfficer:officers.find((o) => o.id === officerId)?.fullName,
-                officerName: officers.find((o) => o.id === officerId)?.fullName,
-              }
-            : c
-        )
-      );
-      toast.success("Case reassigned successfully");
-    } catch (error) {
-      toast.error("Failed to reassign case");
-    }
-  };
+const handleReassign = async (caseId, officerId) => {
+  try {
+    await reassignCase(caseId, officerId);
+    // Re-fetch cases to ensure UI is in sync with backend
+    const response = await getInvestigatingCases();
+    setCases(response.data);
+    toast.success("Case reassigned successfully");
+  } catch (error) {
+    toast.error("Failed to reassign case");
+    // Re-fetch cases to revert any optimistic updates
+    const response = await getInvestigatingCases();
+    setCases(response.data);
+  }
+};
 
   const getStatusColor = (status) => {
     switch (status) {
@@ -145,9 +140,12 @@ export const InvestigatingCases = () => {
                         icon="lucide:user-check"
                         className="text-default-400"
                       />
-                      <span>
-                        Officer: {caseItem.officerName || "Not assigned"}
-                      </span>
+                      {caseItem.assignedOfficer == null? (<span>
+                        Officer: Not assigned
+                      </span>): <span>
+                        Officer: {caseItem.assignedOfficer.fullName}
+                      </span>}
+                      
                     </div>
                     <div className="flex items-center gap-2">
                       <Icon icon="lucide:users" className="text-default-400" />

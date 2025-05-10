@@ -21,16 +21,16 @@ export const CaseManagementModal = ({ isOpen, onClose, report, onAssign }) => {
     if (isOpen) fetchCases();
   }, [isOpen]);
 
-  const handleLinkToCase = (caseId) => {
-    onAssign(report.id, caseId);
-  };
+  const handleLinkToCase = (caseId, caseNumber) => {
+  onAssign(report.id, { caseId, caseNumber });
+};
 
   const handleCreateCase = (newCase) => {
     setCases([...cases, newCase]);
-    toast.success(`New case #${newCase.id} created successfully`);
+    toast.success(`New case #${newCase.caseNumber} created successfully`);
     onCreateClose();
     // Automatically assign the report to the new case
-    onAssign(report.id, newCase.id);
+    onAssign(report.id, { caseId: newCase.id, caseNumber: newCase.caseNumber });
   };
 
   const getStatusColor = (status) => {
@@ -73,7 +73,7 @@ export const CaseManagementModal = ({ isOpen, onClose, report, onAssign }) => {
                       const statusColor = getStatusColor(caseItem.status);
                       return (
                         <TableRow key={caseItem.id}>
-                          <TableCell>#{caseItem.id}</TableCell>
+                          <TableCell>#{caseItem.caseNumber}</TableCell>
                           <TableCell>{caseItem.title}</TableCell>
                           <TableCell>
                             <span className={`text-xs ${statusColor.bg} ${statusColor.text} px-2 py-1 rounded-full capitalize`}>
@@ -85,7 +85,7 @@ export const CaseManagementModal = ({ isOpen, onClose, report, onAssign }) => {
                               size="sm"
                               color="primary"
                               variant="flat"
-                              onPress={() => handleLinkToCase(caseItem.id)}
+                              onPress={() => handleLinkToCase(caseItem.id, caseItem.caseNumber)}
                               disabled={caseItem.status === "resolved"}
                             >
                               Link to Case

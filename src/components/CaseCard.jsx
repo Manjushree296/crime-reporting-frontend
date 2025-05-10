@@ -16,8 +16,10 @@ function CaseCard() {
       try {
         const response = await getCitizenReports();
         console.log("Fetched reports:", response.data);
-        console.log("Officer",response.data[0].officerName)
-        setReports(response.data);
+        // Sort reports in descending order based on id
+      const sortedReports = [...response.data].sort((a, b) => b.id - a.id);
+        
+        setReports(sortedReports);
       } catch (err) {
         console.error("Error fetching reports:", err.response?.data || err.message);
         const errorMessage = err.response?.data?.error || "Failed to load reports. Please try again later.";
@@ -100,7 +102,7 @@ function CaseCard() {
                           
                             <div className="flex items-center gap-2">
                               <Icon icon="lucide:user-check" className="text-default-400" />
-                              <span>Officer: {report.officerName}</span>
+                              <span>Officer:</span>
                               {report.officerName || "Not assigned"}
                             </div>
                           
